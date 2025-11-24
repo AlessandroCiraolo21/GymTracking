@@ -2,20 +2,20 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <title>Gym Tracker</title>
+  <h1>🏋️‍♂️ Gym Tracker</h1>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
-      color-scheme: light dark;
     }
 
-    body {
-      margin: 0;
-      padding: 1rem;
-      background: #f3f4f6;
-      color: #111827;
-    }
+body {
+  margin: 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #eff6ff, #e0f2fe); /* sfondo azzurrino */
+  color: #0f172a;
+}
+
 
     .app {
       max-width: 720px;
@@ -37,13 +37,14 @@
       color: #6b7280;
     }
 
-    .card {
-      background: #ffffff;
-      border-radius: 14px;
-      padding: 0.9rem 1rem;
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
-      margin-bottom: 0.9rem;
-    }
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 0.9rem 1rem;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+  margin-bottom: 0.9rem;
+  border: 1px solid #dbeafe;
+}
 
     label {
       font-size: 0.8rem;
@@ -53,24 +54,32 @@
       color: #374151;
     }
 
-    input,
-    select {
-      width: 100%;
-      padding: 0.45rem 0.6rem;
-      border-radius: 10px;
-      border: 1px solid #d1d5db;
-      box-sizing: border-box;
-      font-size: 0.9rem;
-      background: #f9fafb;
-    }
+input,
+select {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid #bfdbfe;      /* azzurrino */
+  box-sizing: border-box;
+  font-size: 0.9rem;
+  background: #eff6ff;            /* sfondo chiaro azzurrino */
+  color: #0f172a;                 /* testo scuro ben leggibile */
+}
 
-    input:focus,
-    select:focus {
-      outline: none;
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.3);
-      background: #ffffff;
-    }
+input::placeholder,
+select::placeholder {
+  color: #9ca3af;                 /* grigio medio per i placeholder */
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+  background: #ffffff;
+  color: #0f172a;
+}
+
 
     .config-grid {
       display: grid;
@@ -138,15 +147,16 @@
       cursor: pointer;
     }
 
-    .primary-btn {
-      background: #2563eb;
-      color: #ffffff;
-    }
+.primary-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: #ffffff;
+}
 
-    .secondary-btn {
-      background: #e5e7eb;
-      color: #111827;
-    }
+.secondary-btn {
+  background: #e5e7eb;
+  color: #111827;
+}
+
 
     .primary-btn:active,
     .secondary-btn:active {
