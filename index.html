@@ -2,48 +2,91 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
-  <h1>🏋️‍♂️ Gym Tracker</h1>
+  <title>🏋️‍♂️ Gym Tracker</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --accent-soft-2: #eff6ff;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-soft: #e5e7eb;
     }
 
-body {
-  margin: 0;
-  padding: 1rem;
-  background: linear-gradient(135deg, #eff6ff, #e0f2fe); /* sfondo azzurrino */
-  color: #0f172a;
-}
+    body {
+      margin: 0;
+      padding: 1rem;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+    }
 
     .app {
-      max-width: 720px;
+      max-width: 760px;
       margin: 0 auto 2rem;
     }
 
+    /* Header “hero” */
     header {
-      margin-bottom: 0.75rem;
+      margin: 0 0 1rem;
+      padding: 1rem 1.1rem 1.2rem;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #38bdf8 0, #0f172a 48%, #020617 100%);
+      color: #e5f2ff;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(59,130,246,0.5), transparent 60%);
+      opacity: 0.7;
     }
 
     header h1 {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       margin: 0 0 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    header h1 span.icon {
+      font-size: 1.5rem;
     }
 
     header p {
       margin: 0;
-      font-size: 0.85rem;
-      color: #6b7280;
+      font-size: 0.9rem;
+      color: #cbd5f5;
     }
 
-.card {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 0.9rem 1rem;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
-  margin-bottom: 0.9rem;
-  border: 1px solid #dbeafe;
-}
+    header .subtitle {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #93c5fd;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      padding: 0.9rem 1rem;
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.35);
+      margin-bottom: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+    }
 
     label {
       font-size: 0.8rem;
@@ -53,64 +96,122 @@ body {
       color: #374151;
     }
 
-input,
-select {
-  width: 100%;
-  padding: 0.45rem 0.6rem;
-  border-radius: 10px;
-  border: 1px solid #bfdbfe;      /* azzurrino */
-  box-sizing: border-box;
-  font-size: 0.9rem;
-  background: #eff6ff;            /* sfondo chiaro azzurrino */
-  color: #0f172a;                 /* testo scuro ben leggibile */
-}
+    input,
+    select {
+      width: 100%;
+      padding: 0.45rem 0.6rem;
+      border-radius: 10px;
+      border: 1px solid #bfdbfe;      /* azzurrino */
+      box-sizing: border-box;
+      font-size: 0.9rem;
+      background: #eff6ff;            /* sfondo chiaro azzurrino */
+      color: #0f172a;                 /* testo scuro ben leggibile */
+    }
 
-input::placeholder,
-select::placeholder {
-  color: #9ca3af;                 /* grigio medio per i placeholder */
-}
+    input::placeholder,
+    select::placeholder {
+      color: #9ca3af;
+    }
 
-input:focus,
-select:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
-  background: #ffffff;
-  color: #0f172a;
-}
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    /* Fix specifico per input data su Safari/iOS */
+    #dateInput {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      -webkit-appearance: none;
+    }
 
     .config-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
       gap: 0.75rem;
-    }    
-.config-grid > div {
-  min-width: 0;
-}
+      align-items: end;
+    }
 
-    #dateInput {
-  width: 100%;
-  max-width: 100%;
-}
-    
+    .config-grid > div {
+      min-width: 0;
+      overflow: hidden;  /* impedisce al contenuto di far “uscire” la colonna */
+    }
+
+    .config-hint {
+      margin-top: 0.4rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
+
+    .section-title h2 {
+      font-size: 1.05rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #0f172a;
+    }
+
+    .section-title span.badge {
+      font-size: 0.75rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
     .exercise-card {
       margin-bottom: 0.75rem;
       padding: 0.75rem 0.85rem;
-      border-radius: 12px;
+      border-radius: 14px;
       background: #f9fafb;
       border: 1px solid #e5e7eb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .exercise-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, #38bdf8, #4ade80);
+      opacity: 0.9;
+    }
+
+    .exercise-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.3rem;
     }
 
     .exercise-card h3 {
       margin: 0 0 0.1rem;
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 600;
+      color: #111827;
     }
 
     .exercise-tempo {
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: #6b7280;
-      margin-bottom: 0.35rem;
+      margin-top: 0.1rem;
     }
 
     .set-row {
@@ -137,6 +238,10 @@ select:focus {
       font-size: 0.85rem;
     }
 
+    .note-field input::placeholder {
+      font-size: 0.8rem;
+    }
+
     .buttons-row {
       display: flex;
       gap: 0.6rem;
@@ -145,28 +250,32 @@ select:focus {
 
     .buttons-row button {
       flex: 1;
-      padding: 0.6rem 0.8rem;
+      padding: 0.65rem 0.9rem;
       border-radius: 999px;
       border: none;
       font-size: 0.9rem;
       font-weight: 600;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      letter-spacing: 0.01em;
     }
 
-.primary-btn {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #ffffff;
-}
+    .primary-btn {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #ffffff;
+    }
 
-.secondary-btn {
-  background: #e5e7eb;
-  color: #111827;
-}
-
+    .secondary-btn {
+      background: #e5e7eb;
+      color: #111827;
+    }
 
     .primary-btn:active,
     .secondary-btn:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     h2 {
@@ -178,12 +287,14 @@ select:focus {
       width: 100%;
       border-collapse: collapse;
       font-size: 0.8rem;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     th,
     td {
       border-bottom: 1px solid #e5e7eb;
-      padding: 0.25rem 0.3rem;
+      padding: 0.3rem 0.35rem;
       text-align: left;
       vertical-align: top;
     }
@@ -191,15 +302,33 @@ select:focus {
     th {
       font-weight: 600;
       color: #4b5563;
+      background: #eff6ff;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #f9fafb;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #ffffff;
+    }
+
+    #historyEmpty {
+      font-size: 0.82rem;
+      color: var(--text-muted);
     }
 
     @media (max-width: 600px) {
       body {
-        padding: 0.5rem;
+        padding: 0.7rem;
+      }
+
+      header {
+        padding: 0.9rem 0.9rem 1rem;
       }
 
       .card {
-        padding: 0.8rem 0.8rem;
+        padding: 0.85rem 0.85rem;
       }
 
       .config-grid {
@@ -215,12 +344,17 @@ select:focus {
 <body>
   <div class="app">
     <header>
-      <h1>Gym Tracker</h1>
-      <p>Traccia i tuoi progressi per i 3 allenamenti (2 serie per esercizio).</p>
+      <h1><span class="icon">🏋️‍♂️</span>Gym Tracker</h1>
+      <p>Traccia peso, ripetizioni e note per i tuoi 3 allenamenti Full Body.</p>
+      <div class="subtitle">FULLBODY DURO · 8 SETTIMANE</div>
     </header>
 
     <!-- Configurazione giorno + allenamento -->
     <section class="card">
+      <div class="section-title">
+        <h2>Sessione di oggi</h2>
+        <span class="badge">Step 1 · Setup</span>
+      </div>
       <div class="config-grid">
         <div>
           <label for="dateInput">Data</label>
@@ -231,29 +365,40 @@ select:focus {
           <select id="workoutSelect"></select>
         </div>
       </div>
+      <div class="config-hint">Scegli l’allenamento e compila almeno una serie prima di salvare.</div>
     </section>
 
     <!-- Esercizi dinamici -->
     <section class="card">
-      <h2>Esercizi</h2>
+      <div class="section-title">
+        <h2>Lista esercizi</h2>
+        <span class="badge">Step 2 · Compila</span>
+      </div>
       <div id="exercisesContainer"></div>
     </section>
 
     <!-- Bottoni azione -->
     <div class="buttons-row">
-      <button id="saveWorkoutBtn" class="primary-btn">Salva allenamento</button>
-      <button id="exportCsvBtn" class="secondary-btn">Esporta CSV</button>
+      <button id="saveWorkoutBtn" class="primary-btn">
+        💾 <span>Salva allenamento</span>
+      </button>
+      <button id="exportCsvBtn" class="secondary-btn">
+        📤 <span>Esporta CSV</span>
+      </button>
     </div>
 
     <!-- Storico -->
     <section class="card">
-      <h2>Storico</h2>
+      <div class="section-title">
+        <h2>Storico allenamenti</h2>
+        <span class="badge">Step 3 · Review</span>
+      </div>
       <div id="history"></div>
     </section>
   </div>
 
   <script>
-    // === DATI ALLENAMENTI (dal PDF) ===
+    // === DATI ALLENAMENTI ===
     const WORKOUTS = [
       {
         id: 'A1',
@@ -345,6 +490,9 @@ select:focus {
         card.dataset.exerciseId = ex.id;
         card.dataset.exerciseName = ex.name;
 
+        const header = document.createElement('div');
+        header.className = 'exercise-header';
+
         const title = document.createElement('h3');
         title.textContent = ex.name;
 
@@ -352,8 +500,9 @@ select:focus {
         tempo.className = 'exercise-tempo';
         tempo.textContent = 'Tempo: ' + ex.tempo;
 
-        card.appendChild(title);
-        card.appendChild(tempo);
+        header.appendChild(title);
+        header.appendChild(tempo);
+        card.appendChild(header);
 
         // 2 serie per ogni esercizio
         for (let setIndex = 1; setIndex <= 2; setIndex++) {
@@ -415,7 +564,7 @@ select:focus {
     function renderHistory() {
       const container = document.getElementById('history');
       if (!entries.length) {
-        container.textContent = 'Nessun allenamento salvato.';
+        container.innerHTML = '<div id="historyEmpty">Nessun allenamento salvato finora.</div>';
         return;
       }
 
@@ -588,4 +737,3 @@ select:focus {
   </script>
 </body>
 </html>
-
