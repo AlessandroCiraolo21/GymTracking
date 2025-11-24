@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gym Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 1rem; max-width: 480px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+    label { display: block; margin: 0.5rem 0 0.2rem; }
+    input, select, button {
+      width: 100%; padding: 0.4rem; margin-bottom: 0.4rem;
+      box-sizing: border-box;
+    }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+    th, td { border-bottom: 1px solid #ddd; padding: 0.3rem; text-align: left; }
+    th { font-weight: 600; }
+  </style>
+</head>
+<body>
+  <h1>Gym Tracker</h1>
+
+  <label for="exerciseSelect">Esercizio</label>
+  <select id="exerciseSelect"></select>
+
+  <label for="weightInput">Peso (kg)</label>
+  <input type="number" id="weightInput" step="0.5" />
+
+  <label for="repsInput">N. Ripetizioni</label>
+  <input type="number" id="repsInput" />
+
+  <label for="notesInput">Note</label>
+  <input type="text" id="notesInput" placeholder="Sensazioni, difficoltà..." />
+
+  <button id="saveBtn">Salva serie</button>
+
+  <h2>Storico</h2>
+  <div id="history"></div>
+
+  <script>
+    const EXERCISES = [
+      "Panca piana manubri",
+      "Curl manubri alternato",
+      "Lat machine",
+      "Leg press"
+    ];
+
+    let entries = [];
+
+    function loadData() {
+      const saved = localStorage.getItem('gymEntries');
+      if (saved) {
+        try { entries = JSON.parse(saved); } catch (e) { entries = []; }
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem('gymEntries', JSON.stringify(entries));
+    }
+
+    function populateExercises() {
+      const sel = document.getElementById('exerciseSelect');
+      EXERCISES.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        sel.appendChild(opt);
+      });
+    }
+
+    function renderHistory() {
+      const container = document.getElementById('history');
+      if (!entries.length) {
+        container.textContent = "Nessuna serie salvata.";
+        return;
+      }
+
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      thead.innerHTML = "<tr><th>Data</th><th>Esercizio</th><th>Peso</th><th>Rep</th><th>Note</th></tr>";
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      // reverse per vedere prima le serie più recenti
+      entries.slice().reverse().forEach(e => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${e.date}</td>
+          <td>${e.exercise}</td>
+          <td>${e.weight}</td>
+          <td>${e.reps}</td>
+          <td>${e.notes || ""}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      table.appendChild(tbody);
+      container.innerHTML = "";
+      container.appendChild(table);
+    }
+
+    function setupForm() {
+      document.getElementById('saveBtn').addEventListener('click', () => {
+        const exercise = document.getElementById('exerciseSelect').value;
+        const weight = parseFloat(document.getElementById('weightInput').value);
+        const reps = parseInt(document.getElementById('repsInput').value, 10);
+        const notes = document.getElementById('notesInput').value.trim();
+
+        if (!exercise || isNaN(weight) || isNaN(reps)) {
+          alert("Compila esercizio, peso e ripetizioni.");
+          return;
+        }
+
+        const entry = {
+          date: new Date().toLocaleDateString('it-IT'),
+          exercise,
+          weight,
+          reps,
+          notes
+        };
+
+        entries.push(entry);
+        saveData();
+
+        document.getElementById('weightInput').value = "";
+        document.getElementById('repsInput').value = "";
+        document.getElementById('notesInput').value = "";
+
+        renderHistory();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadData();
+      populateExercises();
+      setupForm();
+      renderHistory();
+    });
+  </script>
+</body>
+</html>
